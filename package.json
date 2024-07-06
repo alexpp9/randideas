@@ -1,0 +1,14 @@
+{
+  "name": "randomideas",
+  "version": "1.0.0",
+  "description": "Single webpage to add random ideas",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "APP",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
