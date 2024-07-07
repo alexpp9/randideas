@@ -91,7 +91,8 @@ router.delete('/:id', (req, res) => {
       .status(404)
       .json({ success: false, error: 'Resource not found' });
   }
-  ideas.splice(idea, 1);
+  const index = ideas.indexOf(idea);
+  ideas.splice(index, 1);
   res.json({ success: true, message: 'Deleted' });
 });
 
