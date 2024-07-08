@@ -1,7 +1,7 @@
 const path = require('path');
 const express = require('express');
 require('dotenv').config();
-
+const cors = require('cors');
 // PORT
 const port = process.env.PORT || 5000;
 const connectDB = require('./config/db');
@@ -17,7 +17,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Body parser middleware - to send data;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
+// cors middleware
+app.use(
+  cors({
+    origin: ['http://localhost:5000', 'http://localhost:3000'],
+    credentials: true,
+  })
+);
 // Routes
 // Index
 app.get('/', (req, res) => {
