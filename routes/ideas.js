@@ -43,17 +43,28 @@ router.post('/', async (req, res) => {
 // Update idea
 router.put('/:id', async (req, res) => {
   try {
-    const updatedIdea = await Idea.findByIdAndUpdate(
-      req.params.id,
-      {
-        $set: {
-          text: req.body.text,
-          tag: req.body.tag,
+    // Get idea
+    const idea = await Idea.findById(req.params.id);
+    // Match usernames'
+    if (idea.username === req.body.username) {
+      const updatedIdea = await Idea.findByIdAndUpdate(
+        req.params.id,
+        {
+          $set: {
+            text: req.body.text,
+            tag: req.body.tag,
+          },
         },
-      },
-      { new: true }
-    );
-    res.json({ success: true, data: updatedIdea });
+        { new: true }
+      );
+      // If no return it'll throw error because we're sending a response below as well in case the names don't match
+      return res.json({ success: true, data: updatedIdea });
+    }
+    // Username does not match
+    res.status(403).json({
+      success: false,
+      error: 'You are not authorized to update this resource!',
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, error: 'Something went wrong!' });
@@ -63,8 +74,18 @@ router.put('/:id', async (req, res) => {
 // Delete idea
 router.delete('/:id', async (req, res) => {
   try {
-    await Idea.findByIdAndDelete(req.params.id);
-    res.json({ success: true, data: {} });
+    // Get idea
+    const idea = await Idea.findById(req.params.id);
+    // Match usernames'
+    if (idea.username === req.body.username) {
+      await Idea.findByIdAndDelete(req.params.id);
+      return res.json({ success: true, data: {} });
+    }
+    // Username does not match
+    res.status(403).json({
+      success: false,
+      error: 'You are not authorized to delete this resource!',
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, error: 'Something went wrong!' });
